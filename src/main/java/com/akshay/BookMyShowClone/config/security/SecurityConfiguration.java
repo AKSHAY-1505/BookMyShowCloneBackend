@@ -3,9 +3,11 @@ package com.akshay.BookMyShowClone.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -36,6 +38,11 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {     // Replace default AuthenticationManager with our implementation to override default behaviour                                                      // Authentication Manager invokes the AuthenticationProvider. We need to configure JWT Auth here.
+        return authenticationConfiguration.getAuthenticationManager();                                                                 // AuthenticationManager invokes the AuthenticationProvider
     }
 
     @Bean
