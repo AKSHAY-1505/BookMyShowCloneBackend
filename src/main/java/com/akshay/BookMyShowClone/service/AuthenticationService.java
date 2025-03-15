@@ -13,11 +13,15 @@ public class AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JWTService jwtService;
+
     public String verifyUser(User user) {
         String email = user.getEmail();
         String password = user.getPassword();
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        if(authentication.isAuthenticated()) return "Success";
+
+        if(authentication.isAuthenticated()) return jwtService.generateJwtToken(email);
 
         return "Fail";
     }
