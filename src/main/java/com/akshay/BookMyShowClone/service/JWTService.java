@@ -18,6 +18,7 @@ import java.util.Map;
 public class JWTService {
 
     private static String secretKey;
+    private static final int expirationTime = 24 * 60 * 60 * 1000; // 24 Hours * 60 Minutes * 60 Seconds * 1000 milliseconds
 
     public JWTService() {
         try {
@@ -28,12 +29,12 @@ public class JWTService {
     }
 
     public String generateJwtToken(String email) {
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>();   // To store additional information in JWT Token
         String jwtToken = Jwts.builder()
                 .claims(claims)
                 .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() * 60 * 60 * 60 * 24))  // Seconds = Milliseconds * 60 | Minutes = Seconds * 60 | Hours = Minutes * 60 | Expiration = Hours * 24 (1 Day)
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getKey())
                 .compact();
 
